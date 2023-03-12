@@ -1,0 +1,58 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+api_category_create:
+    path: /api/category
+    controller: App\Controller\CategoryController::create
+    methods: POST|HEAD
+
+api_category_get:
+    path: /api/category/{id}
+    controller: App\Controller\CategoryController::get
+    methods: GET|HEAD
+    requirements:
+        page: '\d+'
+
+api_category_update:
+    path: /api/category/{id}
+    controller: App\Controller\CategoryController::update
+    methods: PUT|HEAD
+    requirements:
+        page: '\d+'
+
+api_category_delete:
+    path: /api/category/{id}
+    controller: App\Controller\CategoryController::delete
+    methods: DELETE|HEAD
+    requirements:
+        page: '\d+'
+
+api_expense_create:
+    path: /api/category
+    controller: App\Controller\ExpenseController::create
+    methods: POST|HEAD
+
+api_expense_get:
+    path: /api/category/{id}
+    controller: App\Controller\ExpenseController::get
+    methods: GET|HEAD
+    requirements:
+        page: '\d+'
+
+api_expense_update:
+    path: /api/category/{id}
+    controller: App\Controller\ExpenseController::update
+    methods: PUT|HEAD
+    requirements:
+        page: '\d+'
+
+api_expense_delete:
+    path: /api/category/{id}
+    controller: App\Controller\ExpenseController::delete
+    methods: DELETE|HEAD
+    requirements:
+        page: '\d+'
+
