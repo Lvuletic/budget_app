@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
@@ -14,14 +15,21 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $categoryID = null;
+    #[Groups(['query'])]
+    private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['query'])]
     private ?string $name = null;
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['query'])]
     private ?\DateTimeInterface $created = null;
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['query'])]
     private ?\DateTimeInterface $modified = null;
+
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Expense::class)]
     private Collection $expenses;
 
@@ -30,9 +38,16 @@ class Category
         $this->expenses = new ArrayCollection();
     }
 
-    public function getCategoryID(): ?int
+    public function getId(): ?int
     {
-        return $this->categoryID;
+        return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): ?string

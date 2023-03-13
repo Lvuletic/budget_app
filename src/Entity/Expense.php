@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\ExpenseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: ExpenseRepository::class)]
 class Expense
@@ -12,40 +14,47 @@ class Expense
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $expenseID = null;
+    #[Groups(['query'])]
+    private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    #[ORM\ManyToOne(inversedBy: 'expenses')]
+    private ?Category $category = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[Groups(['query'])]
     private ?string $price = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
+    #[Groups(['query'])]
     private ?int $quantity = null;
 
-    #[ORM\ManyToOne(inversedBy: 'expenses')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Category $category = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['query'])]
     private ?\DateTimeInterface $created = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['query'])]
     private ?\DateTimeInterface $modified = null;
 
-    public function getExpenseID(): ?int
+    public function getId(): ?int
     {
-        return $this->expenseID;
+        return $this->id;
     }
 
-    public function getName(): ?string
+    public function setId(int $id): self
     {
-        return $this->name;
+        $this->id = $id;
+
+        return $this;
+    }
+    public function getCategory(): ?Category
+    {
+        return $this->category;
     }
 
-    public function setName(string $name): self
+    public function setCategory(?Category $category): self
     {
-        $this->name = $name;
+        $this->category = $category;
 
         return $this;
     }
@@ -70,18 +79,6 @@ class Expense
     public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
 
         return $this;
     }

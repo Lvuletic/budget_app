@@ -1,0 +1,7 @@
+body {
+    background-color: lightgray;
+}
+
+.navbar-nav {
+    flex-direction: row;
+}

@@ -39,28 +39,63 @@ class ExpenseRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Expense[] Returns an array of Expense objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('e.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Expense[] Returns an array of Expense objects
+     */
+    public function search(?int $categoryID, ?string $priceMin, ?string $priceMax, ?string $date): array
+    {
+        $queryBuilder = $this->createQueryBuilder('e');
 
-//    public function findOneBySomeField($value): ?Expense
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if ($categoryID)
+            $queryBuilder->andWhere('e.categoryID = :categoryID');
+
+        if ($priceMin)
+            $queryBuilder->andWhere('e.price >= :priceMin');
+
+        if ($priceMax)
+            $queryBuilder->andWhere('e.price <= :priceMax');
+
+        if ($date)
+            $queryBuilder->andWhere('e.created = :date');
+
+        if ($categoryID)
+            $queryBuilder->setParameter('categoryID', $categoryID);
+
+        if ($priceMin)
+            $queryBuilder->setParameter('priceMin', $priceMin);
+
+        if ($priceMax)
+            $queryBuilder->setParameter('priceMax', $priceMax);
+
+        if ($date)
+            $queryBuilder->setParameter('date', $date);
+
+        return $queryBuilder
+            ->orderBy('e.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return array[] Returns an array prices grouped by date
+     */
+    public function aggregateByDate(): array
+    {
+        $this->getEntityManager()->getConfiguration()
+            ->addCustomDatetimeFunction('YEAR', 'DoctrineExtensions\Query\Mysql\Year');
+        $this->getEntityManager()->getConfiguration()
+            ->addCustomDatetimeFunction('MONTH', 'DoctrineExtensions\Query\Mysql\Month');
+
+        $queryBuilder = $this->createQueryBuilder('e');
+        $queryBuilder
+            ->select('SUM(e.price * e.quantity) AS amount', 'YEAR(e.created) AS year', 'MONTH(e.created) AS month')
+            ->groupBy('year, month');
+
+        return $queryBuilder
+            ->addOrderBy('year', 'DESC')
+            ->addOrderBy('month', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

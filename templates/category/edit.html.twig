@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <h1>Insert category</h1>
+
+    {{ form_start(categoryForm) }}
+        {{ form_row(categoryForm.name) }}
+        {{ form_row(categoryForm.save) }}
+    {{ form_end(categoryForm) }}
+{% endblock %}

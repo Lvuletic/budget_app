@@ -4,6 +4,16 @@ controllers:
         namespace: App\Controller
     type: attribute
 
+app.swagger_ui:
+    path: /api/doc
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
+
+app.swagger:
+    path: /api/doc.json
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger }
+
 api_category_create:
     path: /api/category
     controller: App\Controller\CategoryController::create
@@ -30,29 +40,44 @@ api_category_delete:
     requirements:
         page: '\d+'
 
+api_category_search:
+    path: /categories
+    controller: App\Controller\CategoryController::search
+    methods: GET|HEAD
+
 api_expense_create:
-    path: /api/category
+    path: /api/expense
     controller: App\Controller\ExpenseController::create
     methods: POST|HEAD
 
 api_expense_get:
-    path: /api/category/{id}
+    path: /api/expense/{id}
     controller: App\Controller\ExpenseController::get
     methods: GET|HEAD
     requirements:
         page: '\d+'
 
 api_expense_update:
-    path: /api/category/{id}
+    path: /api/expense/{id}
     controller: App\Controller\ExpenseController::update
     methods: PUT|HEAD
     requirements:
         page: '\d+'
 
 api_expense_delete:
-    path: /api/category/{id}
+    path: /api/expense/{id}
     controller: App\Controller\ExpenseController::delete
     methods: DELETE|HEAD
     requirements:
         page: '\d+'
+
+api_expense_search:
+    path: /api/expense
+    controller: App\Controller\ExpenseController::search
+    methods: GET|HEAD
+
+api_expense_aggregate_by_date:
+    path: /api/aggregateByDate
+    controller: App\Controller\ExpenseController::aggregateByDate
+    methods: GET|HEAD
 
