@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: ExpenseRepository::class)]
 class Expense
@@ -17,6 +18,7 @@ class Expense
     #[Groups(['query'])]
     private int $id;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'expenses')]
     private Category $category;
 
@@ -92,23 +94,9 @@ class Expense
         return $this->created;
     }
 
-    public function setCreated(\DateTimeInterface $created): self
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
     public function getModified(): \DateTimeInterface
     {
         return $this->modified;
-    }
-
-    public function setModified(\DateTimeInterface $modified): self
-    {
-        $this->modified = $modified;
-
-        return $this;
     }
 
     public function getDate(): ?\DateTimeInterface

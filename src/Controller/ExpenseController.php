@@ -12,10 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ExpenseController extends AbstractController
@@ -111,12 +109,7 @@ class ExpenseController extends AbstractController
         $entityManager->persist($expense);
         $entityManager->flush();
 
-        $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups('query')
-            ->toArray();
-        $json = $serializer->serialize($expense, 'json', $context);
-
-        return new JsonResponse($json, 201);
+        return $this->json($expense, 201);
     }
 
     /**
@@ -140,12 +133,7 @@ class ExpenseController extends AbstractController
     public function get(int $id, ExpenseRepository $expenseRepository, SerializerInterface $serializer): Response
     {
         $expense = $expenseRepository->find($id);
-        $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups('query')
-            ->toArray();
-
-        $json = $serializer->serialize($expense, 'json', $context);
-        return new JsonResponse($json);
+        return $this->json($expense);
     }
 
     /**
@@ -190,12 +178,7 @@ class ExpenseController extends AbstractController
         $entityManager->persist($expense);
         $entityManager->flush();
 
-        $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups('query')
-            ->toArray();
-        $json = $serializer->serialize($expense, 'json', $context);
-
-        return new JsonResponse($json);
+        return $this->json($expense);
     }
 
     /**
@@ -225,7 +208,7 @@ class ExpenseController extends AbstractController
         $entityManager->remove($expense);
         $entityManager->flush();
 
-        return new JsonResponse(null, 204);
+        return $this->json(null, 204);
     }
 
     /**
@@ -274,12 +257,7 @@ class ExpenseController extends AbstractController
 
         $expense = $expenseRepository->search($categoryID, $priceMin, $priceMax, $date);
 
-        $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups('query')
-            ->toArray();
-        $json = $serializer->serialize($expense, 'json', $context);
-
-        return new JsonResponse($json);
+        return $this->json($expense);
     }
 
     #[Route('/api/expense/aggregateByDate', methods: ['GET'])]
@@ -288,11 +266,6 @@ class ExpenseController extends AbstractController
     {
         $result = $expenseRepository->aggregateByDate();
 
-        $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups('query')
-            ->toArray();
-        $json = $serializer->serialize($result, 'json', $context);
-
-        return new JsonResponse($json);
+        return $this->json($result);
     }
 }

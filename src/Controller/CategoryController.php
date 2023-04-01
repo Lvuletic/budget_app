@@ -3,20 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Category;
-use App\Entity\Expense;
 use App\Form\CategoryFormType;
-use App\Form\ExpenseFormType;
 use App\Repository\CategoryRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Symfony\Component\Serializer\Context\Normalizer\ObjectNormalizerContextBuilder;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class CategoryController extends AbstractController
@@ -96,17 +91,11 @@ class CategoryController extends AbstractController
     {
         $category = new Category();
         $category->setName('Keyboard');
-        $category->setLastUpdated(new DateTime());
 
         $entityManager->persist($category);
         $entityManager->flush();
 
-        $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups('query')
-            ->toArray();
-        $json = $serializer->serialize($category, 'json', $context);
-
-        return new JsonResponse($json, 201);
+        return $this->json($category, 201);
     }
 
     /**
@@ -132,12 +121,7 @@ class CategoryController extends AbstractController
     {
         $category = $categoryRepository->find($id);
 
-        $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups('query')
-            ->toArray();
-        $json = $serializer->serialize($category, 'json', $context);
-
-        return new JsonResponse($json);
+        return $this->json($category);
     }
 
     /**
@@ -177,12 +161,7 @@ class CategoryController extends AbstractController
         $entityManager->persist($category);
         $entityManager->flush();
 
-        $context = (new ObjectNormalizerContextBuilder())
-            ->withGroups('query')
-            ->toArray();
-        $json = $serializer->serialize($category, 'json', $context);
-
-        return new JsonResponse($json);
+        return $this->json($category);
     }
 
     /**
@@ -212,6 +191,6 @@ class CategoryController extends AbstractController
         $entityManager->remove($category);
         $entityManager->flush();
 
-        return new JsonResponse(null, 204);
+        return $this->json(null, 204);
     }
 }
