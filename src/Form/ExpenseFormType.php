@@ -19,7 +19,7 @@ class ExpenseFormType extends AbstractType
         $builder
             ->add('price', NumberType::class)
             ->add('quantity', NumberType::class)
-            ->add('created', DateType::class)
+            ->add('date', DateType::class)
             ->add('category', EntityType::class, [
                 'class' => 'App\Entity\Category',
                 'choice_label' => 'name',

@@ -39,8 +39,6 @@ class ExpenseController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $expense = $form->getData();
 
-            $expense->setModified(new DateTime());
-
             $entityManager->persist($expense);
             $entityManager->flush();
 
@@ -67,9 +65,7 @@ class ExpenseController extends AbstractController
             $expense->setCategory($data->getCategory());
             $expense->setPrice($data->getPrice());
             $expense->setQuantity($data->getQuantity());
-            $expense->setCreated($data->getCreated());
-
-            $expense->setModified(new DateTime());
+            $expense->setDate($data->getDate());
 
             $entityManager->persist($expense);
             $entityManager->flush();
@@ -110,8 +106,7 @@ class ExpenseController extends AbstractController
         $expense->setCategory($category);
         $expense->setPrice($price);
         $expense->setQuantity($quantity);
-        $expense->setCreated(new DateTime($date));
-        $expense->setModified(new DateTime());
+        $expense->setDate(new DateTime($date));
 
         $entityManager->persist($expense);
         $entityManager->flush();
@@ -191,7 +186,6 @@ class ExpenseController extends AbstractController
         $expense->setCategory($category);
         $expense->setPrice($price);
         $expense->setQuantity($quantity);
-        $expense->setModified(new DateTime());
 
         $entityManager->persist($expense);
         $entityManager->flush();

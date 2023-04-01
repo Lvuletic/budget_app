@@ -20,7 +20,7 @@
                     <div class="col">{{ e.category.name }}</div>
                     <div class="col">{{ e.price }}</div>
                     <div class="col">{{ e.quantity }}</div>
-                    <div class="col">{{ e.created|date("d.m.Y") }}</div>
+                    <div class="col">{{ e.date|date("d.m.Y") }}</div>
                     <div class="col">
                         <a class="" href="{{ path('expense_form_edit', { 'id': e.id }) }}">Edit</a>
                     </div>

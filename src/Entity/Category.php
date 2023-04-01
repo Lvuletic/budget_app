@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
@@ -16,19 +17,21 @@ class Category
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['query'])]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 255)]
     #[Groups(['query'])]
-    private ?string $name = null;
+    private string $name;
 
+    #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['query'])]
-    private ?\DateTimeInterface $created = null;
+    private \DateTimeInterface $created;
 
+    #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Groups(['query'])]
-    private ?\DateTimeInterface $modified = null;
+    private \DateTimeInterface $modified;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Expense::class)]
     private Collection $expenses;
@@ -38,7 +41,7 @@ class Category
         $this->expenses = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -50,7 +53,7 @@ class Category
         return $this;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -62,28 +65,14 @@ class Category
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
+    public function getCreated(): \DateTimeInterface
     {
         return $this->created;
     }
 
-    public function setCreated(\DateTimeInterface $created): self
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    public function getModified(): ?\DateTimeInterface
+    public function getModified(): \DateTimeInterface
     {
         return $this->modified;
-    }
-
-    public function setModified(\DateTimeInterface $modified): self
-    {
-        $this->modified = $modified;
-
-        return $this;
     }
 
     /**
@@ -104,15 +93,4 @@ class Category
         return $this;
     }
 
-    public function removeExpense(Expense $expense): self
-    {
-        if ($this->expenses->removeElement($expense)) {
-            // set the owning side to null (unless already changed)
-            if ($expense->getCategory() === $this) {
-                $expense->setCategory(null);
-            }
-        }
-
-        return $this;
-    }
 }

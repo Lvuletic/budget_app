@@ -39,8 +39,6 @@ class CategoryController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $category = $form->getData();
-            $category->setCreated(new DateTime());
-            $category->setModified(new DateTime());
 
             $entityManager->persist($category);
             $entityManager->flush();
@@ -67,7 +65,6 @@ class CategoryController extends AbstractController
             $data = $form->getData();
 
             $category->setName($data->getName());
-            $category->setModified(new DateTime());
 
             $entityManager->persist($category);
             $entityManager->flush();

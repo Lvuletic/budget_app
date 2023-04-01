@@ -56,7 +56,7 @@ class ExpenseRepository extends ServiceEntityRepository
             $queryBuilder->andWhere('e.price <= :priceMax');
 
         if ($date)
-            $queryBuilder->andWhere('e.created = :date');
+            $queryBuilder->andWhere('e.date = :date');
 
         if ($categoryID)
             $queryBuilder->setParameter('categoryID', $categoryID);
@@ -88,7 +88,7 @@ class ExpenseRepository extends ServiceEntityRepository
 
         $queryBuilder = $this->createQueryBuilder('e');
         $queryBuilder
-            ->select('SUM(e.price * e.quantity) AS amount', 'YEAR(e.created) AS year', 'MONTH(e.created) AS month')
+            ->select('SUM(e.price * e.quantity) AS amount', 'YEAR(e.date) AS year', 'MONTH(e.date) AS month')
             ->groupBy('year, month');
 
         return $queryBuilder
